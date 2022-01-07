@@ -8,6 +8,16 @@
             Profiles Overview
         </div>
         <p class="mssg">{{ session('mssg') }} </p>
+        <form action="{{ route('profiles.index') }}" method=get>
+            <label for="role">Role:</label>
+            <select name="role" id="role">
+                <option disabled selected>Role</option>
+                <option value="admin">Admin</option>
+                <option value="power user">Power user</option>
+                <option value="user">User</option>
+            </select>
+            <input type="submit">
+        </form>
         <table id="profiles-overview">
             <tbody>
                 <tr>
@@ -31,13 +41,16 @@
                         <button>Delete Profile</button>
                         </form>
                     </td>
-                    <td><a href="{{ route('profiles.index', $profile->id) }}"><button>Edit Profile</button></a></td>
+                    <td><a href="{{ route('profiles.edit', $profile->id) }}"><button>Edit Profile</button></a></td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
-        <a href="{{ route('profiles.create') }}" class="links">Create new Profile</a><br>
-        <a href="{{ route('profiles') }}" class="links">Back to Home page</a>
+        {{ $profiles->withQueryString()->links() }}
+        <div>
+            <a href="{{ route('profiles.create') }}" class="links">Create new Profile</a>
+            <a href="{{ route('profiles') }}" class="links">Back to Home page</a>
+        </div>
     </div>
 </div>
 

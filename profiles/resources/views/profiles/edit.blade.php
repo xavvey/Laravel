@@ -4,6 +4,15 @@
 
 <div class="wrapper create-profile">
     <h1>Edit Profile: {{ $profile->name }}</h1>
+    @if ($errors->any())
+        <div class='alert-message'>
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     <form action="{{ route('profiles.update', $profile->id) }}" method="POST">
         @csrf
         @method("PUT")
