@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Profile;
 use App\Http\Requests\CreateProfileRequest;
-use App\Http\Requests\UpdateProfileRequest;
+// use App\Http\Requests\UpdateProfileRequest;
 
 class ProfileController extends Controller
 {
@@ -55,20 +55,20 @@ class ProfileController extends Controller
         return view('profiles.edit', ['profile' => $profile]);
     }
 
-    public function update(UpdateProfileRequest $request, $id)
+    public function update(Request $request ,$id)
     {   
-        $new_profile_data = $request->all();
+        // $new_data = $request->all();
         
-        $profile = Profile::find($id)->update($new_profile_data);
+        // $profile = Profile::find($id)->update($new_profile_data);
 
-        // $profile = Profile::findOrFail($id);
+        $profile = Profile::findOrFail($id);
 
-        // $profile->name = request('name');
-        // $profile->email = request('email');
-        // $profile->phone = request('phone');
+        $profile->name = request('name');
+        $profile->email = request('email');
+        $profile->phone = request('phone');
         // $profile->role = request('role');
 
-        // $profile->save();
+        $profile->save();
 
         return redirect()->route('profiles.index')->with('mssg', 'Profile updated succesfully');
     }
