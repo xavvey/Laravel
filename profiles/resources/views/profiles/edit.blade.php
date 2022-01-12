@@ -1,4 +1,4 @@
-@extends('layouts.layout')
+@extends('layouts.app') 
 
 @section('content')
 
@@ -24,10 +24,13 @@
         <input type="tel" id="phone" name="phone" value="{{ $profile->phone }}">
         <label for="role">Role:</label>
         <select name="role" id="role">
-            <option value="Admin">Admin</option>
+            @foreach ($roles as $role)
+                <option value="{{ $role->id }}" selected>{{ $role->name }}</option>                
+            @endforeach
+            {{-- <option value="Admin">Admin</option>
             <option value="Power user">Power user</option>
             <option value="User">User</option>
-            <option value="{{ $profile->role }}" selected>{{ $profile->role }}</option>
+            <option value="{{ $profile->role }}" selected>{{ $profile->role }}</option> --}}
         </select>
         <input type="hidden" name="id" value="{{ $profile->id }}">
         <input type="submit" name="submit"></input>

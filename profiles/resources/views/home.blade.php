@@ -15,6 +15,7 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+                    <p><a href="{{ route('profiles.index') }}" class="link">To Profiles Overview</a></p>
                 </div>
             </div>
         </div>

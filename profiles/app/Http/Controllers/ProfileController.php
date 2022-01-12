@@ -9,6 +9,11 @@ use App\Http\Requests\CreateProfileRequest;
 
 class ProfileController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
         // dump(); -> like var_dump()
@@ -34,7 +39,6 @@ class ProfileController extends Controller
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'phone' => $request->get('phone'),
-            'role' => $request->get('role'),
         ]);
 
         return redirect()->route('profiles.index')->with('mssg', 'Profile added to database');
@@ -66,7 +70,6 @@ class ProfileController extends Controller
         $profile->name = request('name');
         $profile->email = request('email');
         $profile->phone = request('phone');
-        // $profile->role = request('role');
 
         $profile->save();
 

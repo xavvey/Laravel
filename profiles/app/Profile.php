@@ -10,6 +10,5 @@ class Profile extends Model
         'name',
         'email',
         'phone',
-        'role'
     ];
 }
