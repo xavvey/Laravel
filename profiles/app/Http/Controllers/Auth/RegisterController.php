@@ -73,7 +73,6 @@ class RegisterController extends Controller
         ]);
 
         $role = Role::select("id")->where("name", "user")->first();
-
         $user->roles()->attach($role);
         
         return $user;

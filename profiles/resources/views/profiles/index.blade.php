@@ -25,8 +25,10 @@
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Role</th>
+                    @can('delete all profiles')
                     <th>Delete</th>
                     <th>Edit</th>
+                    @endcan
                 </tr>
                 @foreach($profiles as $profile)
                 <tr>
@@ -34,6 +36,7 @@
                     <td>{{ $profile->email }}</td>
                     <td>{{ $profile->phone }}</td>
                     <td>{{ $profile->role }}</td>
+                    @can('delete all profiles')
                     <td>
                         <form action="{{ route( 'profiles.delete', $profile->id) }}" method="POST">                    
                         @csrf
@@ -42,6 +45,7 @@
                         </form>
                     </td>
                     <td><a href="{{ route('profiles.edit', $profile->id) }}"><button>Edit Profile</button></a></td>
+                    @endcan
                 </tr>
                 @endforeach
             </tbody>

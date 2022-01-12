@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Profile;
 use App\Http\Requests\CreateProfileRequest;
-// use App\Http\Requests\UpdateProfileRequest;
 
 class ProfileController extends Controller
 {
@@ -47,6 +46,7 @@ class ProfileController extends Controller
     public function destroy($id)
     {
         $profile = Profile::findOrFail($id);
+    
         $profile->delete();
 
         return redirect()->route('profiles.index');
