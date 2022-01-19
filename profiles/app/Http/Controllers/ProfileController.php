@@ -15,9 +15,6 @@ class ProfileController extends Controller
 
     public function index(Request $request)
     {
-        // dump(); -> like var_dump()
-        // dd( ); -> stops when this hits
-
         $role = $request->get('role');
 
         $profiles = Profile::when($role, function($query, $role) {
