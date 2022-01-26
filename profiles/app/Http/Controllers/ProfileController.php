@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Profile;
 use App\Http\Requests\CreateProfileRequest;
+use App\Profile;
+use App\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class ProfileController extends Controller
 {
@@ -14,22 +18,28 @@ class ProfileController extends Controller
     }
 
     public function index(Request $request)
-    {
-        // dump(); -> like var_dump()
-        // dd( ); -> stops when this hits
+    {    
+        $role_filter = $request->get('role');
 
-        $role = $request->get('role');
+        $users = User::with('profile')->when($role_filter, function($query, $role_filter) {
+            return $query->role($role_filter);
+        })->orderBy('name', 'asc')->paginate(5);
 
-        $profiles = Profile::when($role, function($query, $role) {
-            return $query->where('role', '=', $role);
-        })->paginate(5);
+        $roles = Role::all();
 
-        return view('profiles.index', ['profiles' => $profiles]);
+        return view('profiles.index', [
+            'users' => $users, 
+            'roles' => $roles,
+        ]); 
     }
 
     public function create()
     {
-        return view('profiles.create');
+        $roles = Role::all();
+
+        return view('profiles.create', [
+            'roles' => $roles,
+        ]);
     }
 
     public function store(CreateProfileRequest $request)
@@ -42,37 +52,58 @@ class ProfileController extends Controller
 
         return redirect()->route('profiles.index')->with('mssg', 'Profile added to database');
     }
-
-    public function destroy($id)
-    {
-        $profile = Profile::findOrFail($id);
     
-        $profile->delete();
-
-        return redirect()->route('profiles.index');
-    }
-
     public function edit($id)
     {
-        $profile = Profile::findOrFail($id);
-
-        return view('profiles.edit', ['profile' => $profile]);
-    }
-
-    public function update(Request $request ,$id)
-    {   
-        // $new_data = $request->all();
+        $profile = Profile::with('user')->findOrFail($id);
+        $user_role = $profile->user->roles->first();
+        $auth_id = Auth::id();
         
-        // $profile = Profile::find($id)->update($new_profile_data);
+        $roles = Role::all();
 
-        $profile = Profile::findOrFail($id);
+        return view('profiles.edit', [
+            'profile' => $profile,
+            'user_role' => $user_role,
+            'roles' => $roles,
+            'auth_id' => $auth_id,
+        ]);
+    }
+    
+    public function update($id)
+    {   
+        $profile = Profile::findOrFail($id); 
+
+        if ($profile->user_id == Auth::id() && 
+            !Auth::user()->hasRole(request('role'))) {
+            return redirect()->back()->with('mssg', "Not authorized to change own role");
+        }
+
+        $profile
+            ->addMediaFromRequest(request('prof-img'))
+            ->toMediaCollection(); //The current request does not have a file in a key named `test image.png`
 
         $profile->name = request('name');
         $profile->email = request('email');
         $profile->phone = request('phone');
-
+        $profile->user->removeRole($profile->user->roles->first());
+        $profile->user->assignRole(request('role'));
+        
         $profile->save();
-
+        
         return redirect()->route('profiles.index')->with('mssg', 'Profile updated succesfully');
+    }
+
+    public function destroy($id)
+    {
+        $user = User::with('profile')->findOrFail($id);
+
+        if ($user->id == Auth::id()) {
+            return redirect()->back()->with('mssg', "Can't delete own profile");
+        }   
+
+        $user->profile->delete();
+        $user->delete();
+    
+        return redirect()->route('profiles.index');
     }
 }

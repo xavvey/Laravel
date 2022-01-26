@@ -7,17 +7,23 @@
         <div class="title m-b-md">
             Profiles Overview
         </div>
+
         <p class="mssg">{{ session('mssg') }} </p>
         <form action="{{ route('profiles.index') }}" method=get>
             <label for="role">Role:</label>
             <select name="role" id="role">
                 <option disabled selected>Role</option>
-                <option value="admin">Admin</option>
-                <option value="power user">Power user</option>
-                <option value="user">User</option>
+                @foreach ($roles as $role)
+                    <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
+                @endforeach
             </select>
-            <input type="submit">
+            <input type="submit" value="Filter">
         </form>
+
+        <form action="{{ route('profiles.index') }}">
+            <input type="submit" value="Reset filter">
+        </form>
+
         <table id="profiles-overview">
             <tbody>
                 <tr>
@@ -26,31 +32,35 @@
                     <th>Phone</th>
                     <th>Role</th>
                     @can('delete all profiles')
-                    <th>Delete</th>
-                    <th>Edit</th>
+                        <th>Delete</th>
+                        <th>Edit</th>
                     @endcan
                 </tr>
-                @foreach($profiles as $profile)
-                <tr>
-                    <td>{{ $profile->name }}</td>
-                    <td>{{ $profile->email }}</td>
-                    <td>{{ $profile->phone }}</td>
-                    <td>{{ $profile->role }}</td>
-                    @can('delete all profiles')
-                    <td>
-                        <form action="{{ route( 'profiles.delete', $profile->id) }}" method="POST">                    
-                        @csrf
-                        @method('DELETE')
-                        <button>Delete Profile</button>
-                        </form>
-                    </td>
-                    <td><a href="{{ route('profiles.edit', $profile->id) }}"><button>Edit Profile</button></a></td>
-                    @endcan
-                </tr>
+
+                @foreach($users as $user)
+                    <tr>
+                        <td>{{ $user->profile->name }}</td>
+                        <td>{{ $user->profile->email }}</td>
+                        <td>{{ $user->profile->phone }}</td>
+                        @foreach ($user->roles as $role)
+                            <td>{{ucFirst($role->name) }}</td>
+                        @endforeach
+                            <td>
+                                <form action="{{ route( 'profiles.delete', $user->id) }}" method="POST">                    
+                                @csrf
+                                @method('DELETE')
+                                <button>Delete Profile</button>
+                                </form>
+                            </td>
+                            <td><a href="{{ route('profiles.edit', $user->profile->id) }}"><button>Edit Profile</button></a></td>
+                    </tr>
                 @endforeach
+
             </tbody>
         </table>
-        {{ $profiles->withQueryString()->links() }}
+
+        {{ $users->withQueryString()->links() }}
+
         <div>
             <a href="{{ route('profiles.create') }}" class="links">Create new Profile</a>
             <a href="{{ route('profiles') }}" class="links">Back to Home page</a>
