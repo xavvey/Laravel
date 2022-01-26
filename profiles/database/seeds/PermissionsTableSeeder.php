@@ -17,27 +17,21 @@ class PermissionsTableSeeder extends Seeder
             [
                 'name' => 'admin',
                 'permissions' => [
-                    ['name' => 'edit own profile'],
-                    ['name' => 'delete own profile'],
-                    ['name' => 'change roles'],
+                    ['name' => 'change other roles'],
                     ['name' => 'edit all profiles'],
-                    ['name' => 'delete all profiles'],
+                    ['name' => 'delete other profiles'],
                 ],
             ],
             [
                 'name' => 'power user',
                 'permissions' => [
-                    ['name' => 'edit own profile'],
-                    ['name' => 'delete own profile'],
                     ['name' => 'edit all profiles'],
-                    ['name' => 'delete all profiles'],
                 ],
             ],
             [
                 'name' => 'user',
                 'permissions' => [
                     ['name' => 'edit own profile'],
-                    ['name' => 'delete own profile'],
                 ],
             ],
         ];

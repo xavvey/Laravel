@@ -14,7 +14,7 @@ class AddUserIdInProfilesTable extends Migration
     public function up()
     {
         Schema::table('profiles', function (Blueprint $table) {
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->onDelete('cascade');
         });
     }
 
