@@ -15,11 +15,11 @@
         </div>
     @endif
     <p class="mssg">{{ session('mssg') }} </p>
-    <form action="{{ route('profiles.update', $profile->id) }}" method="POST">
+    <form action="{{ route('profiles.update', $profile->id) }}" method="POST" enctype='multipart/form-data'>
         @csrf
         @method("PUT")
-        <label for="img">Profile image:</label>
-        <input type="file" id="prof-img" name="prof-img" accept="image/*">
+        <label for="image">Profile image:</label>
+        <input type="file" id="image" name="image">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="{{ $profile->name }}">
         <label for="email">Email:</label>
@@ -29,18 +29,17 @@
         <label for="role">Role:</label>
         <select name="role" id="role">
             <option disabled selected>{{ ucfirst($user_role->name) }}</option>
-            @if($auth_id != $profile->user->id || true)
-                @foreach ($roles as $role)
-                    <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
-                @endforeach
-            @endif
+            @foreach ($roles as $role)
+                <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
+            @endforeach
         </select>
         <input type="hidden" name="id" value="{{ $profile->id }}">
-        <input type="submit" name="submit"></input>
+        <input type="submit" name="submit">
     </form>
-
+    @foreach($profile_imgs as $profile_img)
+        <img src="{{ $profile_img->getUrl('thumb') }}" alt="Small profile picture">
+    @endforeach
     <br><a href="{{ route('profiles.index') }}" class="link">Back to Profile Overview</a>
-
 </div>
 
 @endsection('content')

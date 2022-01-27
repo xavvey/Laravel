@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ProfileController extends Controller
 {
@@ -56,20 +58,27 @@ class ProfileController extends Controller
     public function edit($id)
     {
         $profile = Profile::with('user')->findOrFail($id);
-        $user_role = $profile->user->roles->first();
-        $auth_id = Auth::id();
         
+        if((Auth::user()->hasRole('user') && Auth::id() != $profile->user_id)) {
+            return redirect()->back()->with('mssg', "Not authorized to edit other profiles");
+        }
+
+        $user_role = $profile->user->roles->first();
+        $profile_imgs = $profile->getMedia();
+
+        $auth_id = Auth::id();    
         $roles = Role::all();
 
         return view('profiles.edit', [
             'profile' => $profile,
             'user_role' => $user_role,
+            'profile_imgs' => $profile_imgs,
             'roles' => $roles,
             'auth_id' => $auth_id,
         ]);
     }
     
-    public function update($id)
+    public function update(Request $request, $id)
     {   
         $profile = Profile::findOrFail($id); 
 
@@ -78,15 +87,18 @@ class ProfileController extends Controller
             return redirect()->back()->with('mssg', "Not authorized to change own role");
         }
 
-        $profile
-            ->addMediaFromRequest(request('prof-img'))
-            ->toMediaCollection(); //The current request does not have a file in a key named `test image.png`
+        if($request->image) {
+            $profile->addMediaFromRequest('image')->toMediaCollection(); 
+        }
+        
+        if($request->role) {
+            $profile->user->removeRole($profile->user->roles->first());
+            $profile->user->assignRole(request('role'));
+        }
 
-        $profile->name = request('name');
-        $profile->email = request('email');
-        $profile->phone = request('phone');
-        $profile->user->removeRole($profile->user->roles->first());
-        $profile->user->assignRole(request('role'));
+        $profile->name = $request->name;
+        $profile->email = $request->email;
+        $profile->phone = $request->phone;
         
         $profile->save();
         
@@ -97,7 +109,8 @@ class ProfileController extends Controller
     {
         $user = User::with('profile')->findOrFail($id);
 
-        if ($user->id == Auth::id()) {
+        if ($user->id == Auth::id() &&
+            !Auth::user()->hasRole('admin')) {
             return redirect()->back()->with('mssg', "Can't delete own profile");
         }   
 

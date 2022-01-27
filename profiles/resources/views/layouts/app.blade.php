@@ -77,10 +77,5 @@
             @yield('content')
         </main>
     </div>
-    <div>
-        <footer>
-            Copyright 2022 Xavier Veyrier
-        </footer>
-    </div>
 </body>
 </html>

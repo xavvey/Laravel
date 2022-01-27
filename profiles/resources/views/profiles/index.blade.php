@@ -27,32 +27,35 @@
         <table id="profiles-overview">
             <tbody>
                 <tr>
+                    <th>Profile image</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Role</th>
-                    @can('delete all profiles')
-                        <th>Delete</th>
-                        <th>Edit</th>
-                    @endcan
+                    <th>Delete</th>
+                    <th>Edit</th>
                 </tr>
-
                 @foreach($users as $user)
                     <tr>
+                        <td><img src="{{ $user->profile->getFirstMediaUrl() }}" alt=""></td>
                         <td>{{ $user->profile->name }}</td>
                         <td>{{ $user->profile->email }}</td>
                         <td>{{ $user->profile->phone }}</td>
                         @foreach ($user->roles as $role)
                             <td>{{ucFirst($role->name) }}</td>
                         @endforeach
-                            <td>
-                                <form action="{{ route( 'profiles.delete', $user->id) }}" method="POST">                    
-                                @csrf
-                                @method('DELETE')
-                                <button>Delete Profile</button>
-                                </form>
-                            </td>
-                            <td><a href="{{ route('profiles.edit', $user->profile->id) }}"><button>Edit Profile</button></a></td>
+                        <td>
+                            <form action="{{ route( 'profiles.delete', $user->id) }}" method="POST">                    
+                            @csrf
+                            @method('DELETE')
+                            <button>Delete Profile</button>
+                            </form>
+                        </td>
+                        <td>
+                            <a href="{{ route('profiles.edit', $user->profile->id) }}">
+                            <button>Edit Profile</button>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
 
