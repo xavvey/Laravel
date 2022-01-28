@@ -25,7 +25,7 @@ class ProfileController extends Controller
 
         $users = User::with('profile')->when($role_filter, function($query, $role_filter) {
             return $query->role($role_filter);
-        })->orderBy('name', 'asc')->paginate(5);
+        })->orderBy('name', 'asc')->paginate(5);    
 
         $roles = Role::all();
 
@@ -58,7 +58,7 @@ class ProfileController extends Controller
     public function edit($id)
     {
         $profile = Profile::with('user')->findOrFail($id);
-        
+    
         if((Auth::user()->hasRole('user') && Auth::id() != $profile->user_id)) {
             return redirect()->back()->with('mssg', "Not authorized to edit other profiles");
         }
@@ -102,7 +102,7 @@ class ProfileController extends Controller
         
         $profile->save();
         
-        return redirect()->route('profiles.index')->with('mssg', 'Profile updated succesfully');
+        return redirect()->route('profiles.edit', $profile->id)->with('mssg', 'Profile updated succesfully');
     }
 
     public function destroy($id)
