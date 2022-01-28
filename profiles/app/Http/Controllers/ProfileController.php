@@ -59,7 +59,7 @@ class ProfileController extends Controller
     {
         $profile = Profile::with('user')->findOrFail($id);
     
-        if((Auth::user()->hasRole('user') && Auth::id() != $profile->user_id)) {
+        if ((Auth::user()->hasRole('user') && Auth::id() != $profile->user_id)) {
             return redirect()->back()->with('mssg', "Not authorized to edit other profiles");
         }
 
@@ -87,18 +87,23 @@ class ProfileController extends Controller
             return redirect()->back()->with('mssg', "Not authorized to change own role");
         }
 
-        if($request->image) {
+        if ($request->image) {
             $profile->addMediaFromRequest('image')->toMediaCollection(); 
         }
         
-        if($request->role) {
+        if ($request->role) {
             $profile->user->removeRole($profile->user->roles->first());
             $profile->user->assignRole(request('role'));
         }
-
+            
+        if ($request->select_pic) {
+            $profile->profile_pic_id = $request->select_pic;
+        }
+        
         $profile->name = $request->name;
         $profile->email = $request->email;
         $profile->phone = $request->phone;
+
         
         $profile->save();
         
