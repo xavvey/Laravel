@@ -7,52 +7,62 @@
         <div class="title m-b-md">
             Profiles Overview
         </div>
-
         <p class="mssg">{{ session('mssg') }} </p>
-        <form action="{{ route('profiles.index') }}" method=get>
-            <label for="role">Role:</label>
-            <select name="role" id="role">
-                <option disabled selected>Role</option>
-                @foreach ($roles as $role)
-                    <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
-                @endforeach
-            </select>
-            <input type="submit" value="Filter">
-        </form>
 
-        <form action="{{ route('profiles.index') }}">
-            <input type="submit" value="Reset filter">
-        </form>
+        <div class='input-group mb-3 justify-content-center align-items-center'>
+            <div class='input-group-prepend'>
+                <form action="{{ route('profiles.index') }}" method=get>
+                    <label for="role">Role:</label>
+                    <select name="role" id="role">
+                        <option disabled selected>Role</option>
+                        @foreach ($roles as $role)
+                            <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
+                        @endforeach
+                    </select>
+                    <button type="submit" value="Filter" class='mr-1'>Filter</button>
+                </form>
+                <form action="{{ route('profiles.index') }}">
+                    <button type="submit" value="Reset filter" class='mr-1'>Reset</button>
+                </form>
+            </div>
+        </div>
 
         <table id="profiles-overview">
             <tbody>
                 <tr>
+                    <th>Profile image</th>
                     <th>Name</th>
                     <th>Email</th>
                     <th>Phone</th>
                     <th>Role</th>
-                    @can('delete all profiles')
-                        <th>Delete</th>
-                        <th>Edit</th>
-                    @endcan
+                    <th>Delete</th>
+                    <th>Edit</th>
                 </tr>
-
                 @foreach($users as $user)
                     <tr>
+                        <td>
+                            @if($user->profile->hasMedia())
+                            <img src="{{ $user->profile->getFirstMedia()->getUrl('thumb') }}" alt="">
+                            @endif
+                        </td>
                         <td>{{ $user->profile->name }}</td>
                         <td>{{ $user->profile->email }}</td>
                         <td>{{ $user->profile->phone }}</td>
                         @foreach ($user->roles as $role)
                             <td>{{ucFirst($role->name) }}</td>
                         @endforeach
-                            <td>
-                                <form action="{{ route( 'profiles.delete', $user->id) }}" method="POST">                    
-                                @csrf
-                                @method('DELETE')
-                                <button>Delete Profile</button>
-                                </form>
-                            </td>
-                            <td><a href="{{ route('profiles.edit', $user->profile->id) }}"><button>Edit Profile</button></a></td>
+                        <td>
+                            <form action="{{ route( 'profiles.delete', $user->id) }}" method="POST">                    
+                            @csrf
+                            @method('DELETE')
+                            <button>Delete Profile</button>
+                            </form>
+                        </td>
+                        <td>
+                            <a href="{{ route('profiles.edit', $user->profile->id) }}">
+                            <button>Edit Profile</button>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
 
