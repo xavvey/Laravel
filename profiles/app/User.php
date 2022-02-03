@@ -11,7 +11,8 @@ use App\Profile;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasRoles;
+    use HasRoles;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
