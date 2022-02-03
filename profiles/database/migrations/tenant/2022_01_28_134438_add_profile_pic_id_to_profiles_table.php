@@ -14,7 +14,7 @@ class AddProfilePicIdToProfilesTable extends Migration
     public function up()
     {
         Schema::table('profiles', function (Blueprint $table) {
-            $table->integer('profile_pic_id');
+            $table->integer('profile_pic_id')->nullable();
         });
     }
 

@@ -50,6 +50,7 @@ class ProfileController extends Controller
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'phone' => $request->get('phone'),
+            'profile_pic_id' => null,
         ]);
 
         return redirect()->route('profiles.index')->with('mssg', 'Profile added to database');

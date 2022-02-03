@@ -5,6 +5,7 @@ declare(strict_types=1);
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +25,18 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
     Route::get('/', function () {
-        return 'This is your multi-tenant application. The id of the current tenant is ' . tenant('id');
-    });
+        return view('welcome');
+    })->name('profiles');
+    
+    // Route::get('/profiles', 'ProfileController@index')->name('profiles.index');
+    Route::get('/profiles', [ProfileController::class, 'index'])->name('profiles.index');
+    Route::get('/profiles/create', 'ProfileController@create')->name('profiles.create');
+    Route::post('/profiles', 'ProfileController@store')->name('profiles.store');
+    Route::get('/profiles/edit/{id}', 'ProfileController@edit')->name('profiles.edit');
+    Route::delete('/profiles/{id}', 'ProfileController@destroy')->name('profiles.delete');
+    Route::put('/profiles/{id}', 'ProfileController@update')->name('profiles.update');
+    
+    Auth::routes();
+    
+    Route::get('/home', 'HomeController@index')->name('home');
 });
