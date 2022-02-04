@@ -1,0 +1,13 @@
+{
+    "name": "ProfileManagement",
+    "alias": "profilemanagement",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ProfileManagement\\Providers\\ProfileManagementServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
