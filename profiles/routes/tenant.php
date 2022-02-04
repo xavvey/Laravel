@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use Modules\ProfileManagement\Http\Controllers\ProfileController;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
-// use App\Http\Controllers\ProfileController;
-use Modules\ProfileManagement\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------

@@ -2,12 +2,12 @@
 
 namespace Modules\ProfileManagement\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\ProfileManagement\Entities\Profile;
-use App\User;
 use Modules\ProfileManagement\Http\Requests\CreateProfileRequest;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
