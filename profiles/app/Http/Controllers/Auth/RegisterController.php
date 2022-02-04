@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Profile;
 use App\Providers\RouteServiceProvider;
-use App\User;
+use Modules\ProfileManagement\Entities\Profile;
+use Modules\ProfileManagement\Entities\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;

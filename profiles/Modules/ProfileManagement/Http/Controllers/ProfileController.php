@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\ProfileManagement\Http\Controllers;
 
-use App\Http\Requests\CreateProfileRequest;
-use App\Profile;
-use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
+use Modules\ProfileManagement\Entities\Profile;
+use App\User;
+use Modules\ProfileManagement\Http\Requests\CreateProfileRequest;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Spatie\Permission\Models\Role;
 
 class ProfileController extends Controller
 {
@@ -29,7 +30,7 @@ class ProfileController extends Controller
 
         $roles = Role::all();
 
-        return view('profiles.index', [
+        return view('profilemanagement::profiles.index', [
             'users' => $users, 
             'roles' => $roles,
         ]); 
@@ -39,7 +40,7 @@ class ProfileController extends Controller
     {
         $roles = Role::all();
 
-        return view('profiles.create', [
+        return view('profilemanagement::profiles.create', [
             'roles' => $roles,
         ]);
     }
@@ -70,7 +71,7 @@ class ProfileController extends Controller
         $auth_id = Auth::id();    
         $roles = Role::all();
 
-        return view('profiles.edit', [
+        return view('profilemanagement::profiles.edit', [
             'profile' => $profile,
             'user_role' => $user_role,
             'profile_imgs' => $profile_imgs,
@@ -104,7 +105,6 @@ class ProfileController extends Controller
         $profile->name = $request->name;
         $profile->email = $request->email;
         $profile->phone = $request->phone;
-
         
         $profile->save();
         

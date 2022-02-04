@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
-use App\Profile;
+use Modules\ProfileManagement\Entities\Profile;
 
 class User extends Authenticatable
 {
