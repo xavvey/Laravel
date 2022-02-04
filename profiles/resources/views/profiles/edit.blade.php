@@ -16,6 +16,7 @@
                 </ul>
             </div>
         @endif
+
         <div>
             <form action="{{ route('profiles.update', $profile->id) }}" method="POST" enctype='multipart/form-data'>
                 @csrf
@@ -35,20 +36,26 @@
                         <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
                     @endforeach
                 </select>
+                @if($profile->hasMedia())
+                    @foreach($profile_imgs as $profile_img)
+                        <div class='form-check'>
+                            <img src="{{ $profile_img->getUrl('thumb') }}" alt="picture overview">
+                            <input type="radio" name='select_pic' value='{{ $profile_img->id }}'>
+                        </div>
+                    @endforeach
+                @endif
                 <input type="hidden" name="id" value="{{ $profile->id }}">
-                <input type="submit" name="submit">
+                <input type="submit" name="edit_profile">
             </form>
         </div>
-        <div class='wrapper'>
-            <h3>Choose your profile picture</h3>
-            <form action="{{ route('profiles.update', $profile->id) }}" method='POST' enctype='multipart/form-data'></form>
-                @foreach($profile_imgs as $profile_img)
-                    <img src="{{ $profile_img->getUrl('thumb') }}" alt="picture overview">
-                    <input type="radio" name='select-pic' value='{{ $profile_img->id }}'>
-                @endforeach
-                <input type="submit" name="profile-pic">
-            </form>
+
+        <div>
+            <h3>Selected Profile picture</h3>
+            @if($profile->hasMedia())
+            <img src="{{ $profile->media()->where('id', $profile->profile_pic_id)->first()->getUrl('big picture') }}" alt="current profile picture">
+            @endif
         </div>
+
     </div>
     <br><a href="{{ route('profiles.index') }}" class="link">Back to Profile Overview</a>
 </div>

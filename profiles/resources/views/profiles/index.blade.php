@@ -42,7 +42,7 @@
                     <tr>
                         <td>
                             @if($user->profile->hasMedia())
-                            <img src="{{ $user->profile->getFirstMedia()->getUrl('thumb') }}" alt="">
+                                <img src="{{ $user->profile->media()->where('id', $user->profile->profile_pic_id)->first()->getUrl('thumb') }}">
                             @endif
                         </td>
                         <td>{{ $user->profile->name }}</td>
@@ -65,7 +65,6 @@
                         </td>
                     </tr>
                 @endforeach
-
             </tbody>
         </table>
 
