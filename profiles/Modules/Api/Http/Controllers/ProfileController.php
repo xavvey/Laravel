@@ -48,9 +48,16 @@ class ProfileController extends Controller
      * @param int $id
      * @return Response
      */
-    public function update(Profile $profile)
+    public function update(Profile $profile, Request $request)
     {
-        //
+        $profile = Profile::update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'profile_pic_id' => $request->select_pic,
+        ]);
+
+        return $profile;
     }
 
     /**

@@ -17,6 +17,9 @@ class Profile extends JsonResource
         return [
             "id" => $this->id,
             "user" => new ProfileUser($this->user),
+            "email" => $this->email,
+            "phone" => $this->phone,
+            "profile_pic_id" => $this->profile_pic_id,
         ];
     }
 }

@@ -20,4 +20,5 @@ Route::middleware('auth:api')->get('/api', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('/profiles', ProfileController::class); // api resource route
+Route::apiResource('
+/profiles', ProfileController::class); // api resource route
