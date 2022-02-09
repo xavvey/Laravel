@@ -2,5 +2,6 @@
     "BackOffice": true,
     "ProfileManagement": true,
     "ProfilesApi": true,
-    "Api": true
+    "Api": true,
+    "Test": true
 }

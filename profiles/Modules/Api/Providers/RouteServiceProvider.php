@@ -2,8 +2,10 @@
 
 namespace Modules\Api\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -12,7 +14,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $moduleNamespace = 'Modules\Api\Http\Controllers';
+    protected $moduleNamespace = '';
 
     /**
      * Called before routes are registered.
@@ -45,9 +47,15 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @return void
      */
+
+     
     protected function mapWebRoutes()
     {
-        Route::middleware('web')
+        Route::middleware([
+            'web',       
+            InitializeTenancyByDomain::class,
+            PreventAccessFromCentralDomains::class,
+            ])
             ->namespace($this->moduleNamespace)
             ->group(module_path('Api', '/Routes/web.php'));
     }
@@ -62,7 +70,11 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::prefix('api')
-            ->middleware('api')
+            ->middleware([
+            'api',              
+            InitializeTenancyByDomain::class,
+            PreventAccessFromCentralDomains::class,
+            ])
             ->namespace($this->moduleNamespace)
             ->group(module_path('Api', '/Routes/api.php'));
     }

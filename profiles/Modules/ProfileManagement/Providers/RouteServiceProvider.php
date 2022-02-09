@@ -12,7 +12,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $moduleNamespace = 'Modules\ProfileManagement\Http\Controllers';
+    protected $moduleNamespace = '';
 
     /**
      * Called before routes are registered.
@@ -47,7 +47,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        Route::middleware('web')
+        Route::middleware([
+            'web',       
+            InitializeTenancyByDomain::class,
+            PreventAccessFromCentralDomains::class,
+            ])
             ->namespace($this->moduleNamespace)
             ->group(module_path('ProfileManagement', '/Routes/web.php'));
     }
@@ -61,7 +65,12 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::prefix('api')
+        Route::prefix('api') 
+            ->middleware([
+            'api',              
+            InitializeTenancyByDomain::class,
+            PreventAccessFromCentralDomains::class,
+            ])
             ->middleware('api')
             ->namespace($this->moduleNamespace)
             ->group(module_path('ProfileManagement', '/Routes/api.php'));
