@@ -78,6 +78,8 @@ class ProfileController extends Controller
         return new ProfileResource($profile);
     }
 
+
+
     /**
      * Remove the specified resource from storage.
      * @param int $id
