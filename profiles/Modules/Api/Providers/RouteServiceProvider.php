@@ -76,6 +76,7 @@ class RouteServiceProvider extends ServiceProvider
             PreventAccessFromCentralDomains::class,
             ])
             ->namespace($this->moduleNamespace)
+            ->name('api.')
             ->group(module_path('Api', '/Routes/api.php'));
     }
 }

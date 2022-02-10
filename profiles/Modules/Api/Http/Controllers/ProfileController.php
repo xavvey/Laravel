@@ -2,9 +2,14 @@
 
 namespace Modules\Api\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
 use Modules\ProfileManagement\Entities\Profile;
 use Modules\Api\Transformers\ProfileCollection;
 use Modules\Api\Transformers\Profile as ProfileResource;
@@ -14,7 +19,7 @@ class ProfileController extends Controller
     /**
      * Display a listing of the resource.
      * @return Response
-     * 
+     *
      */
     public function index()
     {
@@ -29,7 +34,23 @@ class ProfileController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+        ]);
+
+        $role = Role::select("id")->where("name", "user")->first();
+        $user->roles()->attach($role);
+
+        $user->profile()->create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+        ]);
+
+        return new ProfileResource($user->profile);
     }
 
     /**
@@ -48,16 +69,13 @@ class ProfileController extends Controller
      * @param int $id
      * @return Response
      */
-    public function update(Profile $profile, Request $request)
+    public function update(Request $request, $id)
     {
-        $profile = Profile::update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'profile_pic_id' => $request->select_pic,
-        ]);
+        $profile = Profile::findOrFail($id);
 
-        return $profile;
+        $profile->update($request->all());
+
+        return new ProfileResource($profile);
     }
 
     /**
@@ -65,8 +83,12 @@ class ProfileController extends Controller
      * @param int $id
      * @return Response
      */
-    public function destroy(Profile $profile)
+    public function destroy($id)
     {
-        //
+        $profile = Profile::findOrFail($id);
+
+        $profile->user->delete();
+
+        return $profile->delete();
     }
 }
