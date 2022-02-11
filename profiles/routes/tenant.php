@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use Modules\ProfileManagement\Http\Controllers\ProfileController;
 use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
-use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,18 +26,17 @@ Route::middleware([
     PreventAccessFromCentralDomains::class,
 ])->group(function () {
     Route::get('/', function () {
-        return view('welcome');
+        return view('profilemanagement::welcome');
     })->name('profiles');
     
-    // Route::get('/profiles', 'ProfileController@index')->name('profiles.index');
     Route::get('/profiles', [ProfileController::class, 'index'])->name('profiles.index');
-    Route::get('/profiles/create', 'ProfileController@create')->name('profiles.create');
-    Route::post('/profiles', 'ProfileController@store')->name('profiles.store');
-    Route::get('/profiles/edit/{id}', 'ProfileController@edit')->name('profiles.edit');
-    Route::delete('/profiles/{id}', 'ProfileController@destroy')->name('profiles.delete');
-    Route::put('/profiles/{id}', 'ProfileController@update')->name('profiles.update');
+    Route::get('/profiles/create', [ProfileController::class, 'create'])->name('profiles.create');
+    Route::post('/profiles', [ProfileController::class, 'store'])->name('profiles.store');
+    Route::get('/profiles/edit/{id}', [ProfileController::class, 'edit'])->name('profiles.edit');
+    Route::delete('/profiles/{id}', [ProfileController::class, 'destroy'])->name('profiles.delete');
+    Route::put('/profiles/{id}', [ProfileController::class, 'update'])->name('profiles.update');
     
     Auth::routes();
     
-    Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 });

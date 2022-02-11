@@ -5,9 +5,9 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Support\Facades\Auth;
-use App\Profile;
+use Modules\ProfileManagement\Entities\Profile;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
