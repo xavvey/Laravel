@@ -16,6 +16,7 @@ class Profile extends Model implements HasMedia
         'name',
         'email',
         'phone',
+        'profile_pic_id',
     ];
 
     public function user()

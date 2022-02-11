@@ -80,8 +80,6 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'phone' => $data['phone'],
         ]);
-
-        // $user->profile()->save(new Profile);
         
         return $user;
     }

@@ -51,7 +51,6 @@ class ProfileController extends Controller
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'phone' => $request->get('phone'),
-            'profile_pic_id' => null,
         ]);
 
         return redirect()->route('profiles.index')->with('mssg', 'Profile added to database');
@@ -61,7 +60,10 @@ class ProfileController extends Controller
     {
         $profile = Profile::findOrFail($id);
     
-        if ((Auth::user()->hasRole('user') && Auth::id() != $profile->user_id)) {
+        if (
+            Auth::user()->hasRole('user') 
+            && Auth::id() != $profile->user_id
+        ) {
             return redirect()->back()->with('mssg', "Not authorized to edit other profiles");
         }
 
@@ -84,19 +86,25 @@ class ProfileController extends Controller
     {   
         $profile = Profile::findOrFail($id); 
 
-        if ($profile->user_id == Auth::id() && 
-            !Auth::user()->hasRole(request('role'))) {
+        if (
+            $profile->user_id == Auth::id() 
+            && !Auth::user()->hasRole(request('role'))
+        ) {            
             return redirect()->back()->with('mssg', "Not authorized to change own role");
         }
         
-        if ($request->role) {
+        if (
+            $request->image 
+            && empty($profile->profile_pic_id)
+        ) {
+            $image = $profile->addMediaFromRequest('image')->toMediaCollection(); 
+            $profile->profile_pic_id = $image->id;
+        }        
+
+        if ($request->role) {                
             $profile->user->removeRole($profile->user->roles->first());
             $profile->user->assignRole(request('role'));
         }
-
-        if ($request->image) {
-            $profile->addMediaFromRequest('image')->toMediaCollection(); 
-        }        
 
         if ($request->select_pic) {
             $profile->profile_pic_id = $request->select_pic;
@@ -118,8 +126,10 @@ class ProfileController extends Controller
     {
         $user = User::with('profile')->findOrFail($id);
 
-        if ($user->id == Auth::id() &&
-            !Auth::user()->hasRole('admin')) {
+        if (
+            $user->id == Auth::id() 
+            && !Auth::user()->hasRole('admin')
+        ) {
             return redirect()->back()->with('mssg', "Can't delete own profile");
         }   
 

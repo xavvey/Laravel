@@ -3,16 +3,16 @@
 namespace Modules\Api\Http\Controllers;
 
 use App\User;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Spatie\Permission\Models\Role;
-use Modules\ProfileManagement\Entities\Profile;
-use Modules\Api\Transformers\ProfileCollection;
 use Modules\Api\Transformers\Profile as ProfileResource;
+use Modules\Api\Transformers\ProfileCollection;
+use Modules\ProfileManagement\Entities\Profile;
+use Spatie\Permission\Models\Role;
 
 class ProfileController extends Controller
 {
@@ -49,6 +49,10 @@ class ProfileController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
         ]);
+        
+        $image = $user->profile->addMediaFromRequest('profile_pic')->toMediaCollection();
+        $user->profile->profile_pic_id = $image->id;
+        $user->profile->save();
 
         return new ProfileResource($user->profile);
     }

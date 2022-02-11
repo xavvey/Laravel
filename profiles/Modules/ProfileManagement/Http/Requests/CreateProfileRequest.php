@@ -26,9 +26,8 @@ class CreateProfileRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'email|required|unique:profiles',
-            // 'phone' => 'required',
-            'role' => 'required',  
-            'profile_pic_id' => 'nullable', 
+            'phone' => 'nullable',
+            'role' => 'required', 
         ];
     }
 }
