@@ -50,8 +50,11 @@ class ProfileController extends Controller
             'phone' => $request->phone,
         ]);
         
-        $image = $user->profile->addMediaFromRequest('profile_pic')->toMediaCollection();
-        $user->profile->profile_pic_id = $image->id;
+        if ($request->profile_pic) {
+            $image = $user->profile->addMediaFromRequest('profile_pic')->toMediaCollection();
+            $user->profile->profile_pic_id = $image->id;
+        }
+        
         $user->profile->save();
 
         return new ProfileResource($user->profile);
