@@ -1,0 +1,151 @@
+html,
+body {
+  background-color: #fff;
+  color: #636b6f;
+  font-family: "Nunito", sans-serif;
+  font-weight: 200;
+  height: 100vh;
+  margin: 0;
+}
+
+.full-height {
+  height: 100vh;
+}
+
+.flex-center {
+  -webkit-box-align: center;
+          align-items: center;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+}
+
+.position-ref {
+  position: relative;
+}
+
+.top-right {
+  position: absolute;
+  right: 10px;
+  top: 18px;
+}
+
+.content {
+  text-align: center;
+}
+
+a.links {
+  display: block;
+  text-align: center;
+  margin-top: 5px;
+  color: #636b6f;
+  margin-bottom: 5px;
+}
+
+.m-b-md {
+  margin-bottom: 30px;
+}
+
+footer {
+  bottom: 0px;
+  position:absolute;
+  height: 25px;
+  left: 0px;
+  right: 0px;
+  background: #eee;
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 50px;
+  text-transform: uppercase;
+  border-bottom: 2px solid;
+  padding: 12px 0;
+  color: #636b6f;
+}
+
+.wrapper {
+  max-width: 1140px;
+  padding: 10px;
+  margin: 20px auto;
+}
+
+.create-profile {
+  background: #f7f7f7;
+  padding: 20px;
+}
+
+.create-profile label,
+.create-profile select {
+  display: block;
+}
+
+.create-profile label {
+  margin-top: 30px;
+}
+
+.create-profile select {
+  padding: 8px;
+  width: 200px;
+}
+
+.create-profile input[type=submit] {
+  background: #636b6f;
+  padding: 8px 20px;
+  color: #fff;
+  border: 0;
+  margin-top: 20px;
+}
+
+.profile-index h1 {
+  margin-bottom: 40px;
+}
+
+#profiles-overview {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#profiles-overview td, #profiles-overview th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#profiles-overview tr:nth-child(even) {
+  background-color: #e9e8e8;
+}
+
+#profiles-overview tr:hover {background-color: rgb(199, 199, 199);}
+
+#profiles-overview th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+  background-color: #636b6f;
+  color: white;
+}
+
+.pagination {
+  list-style: none;
+  padding-left: 0;
+  text-align: left;
+}
+
+.pagination li {
+  display: inline-block;
+}
+
+.pagination li+li {
+  margin-left: 1rem;
+}
+
+.pagination a {
+  text-decoration: none;
+  padding: 0.2rem 0.4rem;
+  color: #636b6f;
+  border: 1px solid #636b6f;
+  border-radius: 2px;
+}
+
